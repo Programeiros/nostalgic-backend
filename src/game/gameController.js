@@ -1,10 +1,10 @@
-const utils = require('./nesUtils');
+const utils = require('./gameUtils');
 
-class NesController {
-  constructor(app, port) {
+class GameController {
+  constructor(app, port, route) {
     this.app = app;
     this.port = port;
-    this.route = '/api/NES';
+    this.route = route;
   };
 
   start() {
@@ -76,4 +76,4 @@ class NesController {
   }
 }
 
-module.exports = NesController;
+module.exports = GameController;

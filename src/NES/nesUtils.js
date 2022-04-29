@@ -11,7 +11,10 @@ function getNesgames() {
   try {
     return Object.values(nesgames);
   } catch (error) {
-    return { "error": error.message, "stack": error.stack };
+    return {
+      "error": error.message,
+      "stack": error.stack
+    };
   }
 }
 
@@ -19,12 +22,18 @@ function getNesgameByid(id) {
   try {
     return nesgames[id] || {};
   } catch (error) {
-    return { "error": error.message, "stack": error.stack };
+    return {
+      "error": error.message,
+      "stack": error.stack
+    };
   }
 }
 
 function setNesGame(nesgame) {
-  if (!nesgame.id) nesgame.id = sequence.id;
+  if (!nesgame.id) {
+    nesgame.id = sequence.id
+  };
+
   nesgames[nesgame.id] = nesgame;
   return nesgame;
 }

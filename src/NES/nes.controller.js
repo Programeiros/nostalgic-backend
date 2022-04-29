@@ -46,7 +46,7 @@ class NesController {
     this.app.put(this.route + '/:id?', (req, res) => {
       try {
         const nesgame = utils.setNesGame({
-          id: req.body.id,
+          id: req.params.id,
           name: req.body.name,
           description: req.body.description,
         });

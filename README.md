@@ -2,15 +2,15 @@ API de jogos antigos do projeto Nostalgic, feita com Express js
 
 ## Getting Started
 
-1.  Cloanar o Repositório:
+1.  Clonar o Repositório:
 
         git clone https://github.com/Programeiros/nostalgic-backend.git
 
-2.  Instalar as dependeências:
+2.  Instalar as dependências:
 
         npm install
 
-3.  Rodar o projeto:
+3.  Executar o projeto:
 
         node src/app.js
 

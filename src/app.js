@@ -1,14 +1,16 @@
-const express = require('express');
+require("dotenv").config();
+
+const express = require("express");
 const app = express();
-const port = 3000;
-const GameController = require('./controller/gameController');
-const game = new GameController(app, '/api/games');
+const port = process.env.PORT || 3000;
+const GameController = require("./controller/gameController");
+const game = new GameController(app, "/api/games");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/api', (req, res) => {
-  res.send('Aplicação funcionando!');
+app.get("/api", (req, res) => {
+  res.send("Aplicação funcionando!");
 });
 
 game.start();

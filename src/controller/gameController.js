@@ -37,8 +37,6 @@ class GameController {
         this.verify_string(this.params.genre, "genre", 50);
         this.verify_string(this.params.mode, "mode", 100);
 
-        console.log(this.params);
-
         const nesgame = utils.setGame(this.params);
 
         res.send(nesgame);
@@ -54,15 +52,16 @@ class GameController {
   put() {
     this.app.put(this.route + "/:id?", (req, res) => {
       try {
-        this.verify_string(req.body.name, "name");
-        this.verify_string(req.body.description, "description", 500);
-        this.verify_string(req.body.developer, "developer", 50);
-        this.verify_string(req.body.launchdate, "launchdate");
-        this.verify_string(req.body.platforms, "platforms", 50);
-        this.verify_string(req.body.genre, "genre", 50);
-        this.verify_string(req.body.mode, "mode", 100);
+        this.set_values(req);
+        this.verify_string(this.params.name, "name");
+        this.verify_string(this.params.description, "description", 500);
+        this.verify_string(this.params.developer, "developer", 50);
+        this.verify_string(this.params.launchdate, "launchdate");
+        this.verify_string(this.params.platforms, "platforms", 50);
+        this.verify_string(this.params.genre, "genre", 50);
+        this.verify_string(this.params.mode, "mode", 100);
 
-        const nesgame = utils.updateGame(req.params.id, req.body);
+        const nesgame = utils.updateGame(req.params.id, this.params);
 
         res.send(nesgame);
       } catch (error) {

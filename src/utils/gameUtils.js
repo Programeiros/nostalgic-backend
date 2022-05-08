@@ -83,10 +83,21 @@ function deleteGame(id) {
   return game;
 }
 
+function deleteAll() {
+  const keys = Object.keys(games);
+
+  keys.forEach((obj) => {
+    delete_file(games[obj].image);
+    delete games[obj];
+  });
+
+  return "Todos os dados deletados com sucesso!";
+}
+
 function delete_file(path) {
   fs.unlink(path, (err) => {
     if (err) return console.log(err);
-    console.log("file deleted successfully");
+    console.log("Arquivo deletado com sucesso!");
   });
 }
 
@@ -96,4 +107,5 @@ module.exports = {
   getgames,
   updateGame,
   deleteGame,
+  deleteAll,
 };

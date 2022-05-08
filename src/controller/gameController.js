@@ -74,6 +74,18 @@ class GameController {
   }
 
   delete() {
+    this.app.delete(this.route, (req, res) => {
+      try {
+        const message = utils.deleteAll();
+        res.send(message);
+      } catch (error) {
+        res.send({
+          error: error.message,
+          stack: error.stack,
+        });
+      }
+    });
+
     this.app.delete(this.route + "/:id?", (req, res) => {
       try {
         const game = utils.deleteGame(req.params.id);

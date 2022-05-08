@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const sequence = {
   _id: 1,
   get id() {
@@ -59,25 +61,33 @@ function setGame(value) {
 }
 
 function updateGame(id, newdata) {
-  game.id = newdata.id;
-  game.name = newdata.name;
-  game.description = newdata.description;
-  game.developer = newdata.developer;
-  game.genre = newdata.genre;
-  game.launchdate = newdata.launchdate;
-  game.mode = newdata.mode;
-  game.image = newdata.image;
-  game.platforms = newdata.platforms;
+  delete_file(games[id].image);
 
-  games[id] = game;
+  games[id].id = id;
+  games[id].name = newdata.name;
+  games[id].description = newdata.description;
+  games[id].developer = newdata.developer;
+  games[id].genre = newdata.genre;
+  games[id].launchdate = newdata.launchdate;
+  games[id].mode = newdata.mode;
+  games[id].image = newdata.image;
+  games[id].platforms = newdata.platforms;
 
   return games[id];
 }
 
 function deleteGame(id) {
   const game = games[id];
+  delete_file(game.image);
   delete games[id];
   return game;
+}
+
+function delete_file(path) {
+  fs.unlink(path, (err) => {
+    if (err) return console.log(err);
+    console.log("file deleted successfully");
+  });
 }
 
 module.exports = {

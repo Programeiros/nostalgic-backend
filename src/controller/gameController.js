@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const utils = require("../utils/gameUtils");
 
 class GameController {
@@ -26,17 +28,18 @@ class GameController {
   post() {
     this.app.post(this.route, (req, res) => {
       try {
-        this.verify_string(req.body.name, "name");
-        this.verify_string(req.body.description, "description", 500);
-        this.verify_string(req.body.developer, "developer", 50);
-        this.verify_string(req.body.launchdate, "launchdate");
-        this.verify_string(req.body.platforms, "platforms", 50);
-        this.verify_string(req.body.genre, "genre", 50);
-        this.verify_string(req.body.mode, "mode", 100);
+        this.set_values(req);
+        this.verify_string(this.params.name, "name");
+        this.verify_string(this.params.description, "description", 500);
+        this.verify_string(this.params.developer, "developer", 50);
+        this.verify_string(this.params.launchdate, "launchdate");
+        this.verify_string(this.params.platforms, "platforms", 50);
+        this.verify_string(this.params.genre, "genre", 50);
+        this.verify_string(this.params.mode, "mode", 100);
 
-        const nesgame = utils.setGame(req.body);
+        const game = utils.setGame(this.params);
 
-        res.send(nesgame);
+        res.send(game);
       } catch (error) {
         res.send({
           error: error.message,
@@ -49,17 +52,18 @@ class GameController {
   put() {
     this.app.put(this.route + "/:id?", (req, res) => {
       try {
-        this.verify_string(req.body.name, "name");
-        this.verify_string(req.body.description, "description", 500);
-        this.verify_string(req.body.developer, "developer", 50);
-        this.verify_string(req.body.launchdate, "launchdate");
-        this.verify_string(req.body.platforms, "platforms", 50);
-        this.verify_string(req.body.genre, "genre", 50);
-        this.verify_string(req.body.mode, "mode", 100);
+        this.set_values(req);
+        this.verify_string(this.params.name, "name");
+        this.verify_string(this.params.description, "description", 500);
+        this.verify_string(this.params.developer, "developer", 50);
+        this.verify_string(this.params.launchdate, "launchdate");
+        this.verify_string(this.params.platforms, "platforms", 50);
+        this.verify_string(this.params.genre, "genre", 50);
+        this.verify_string(this.params.mode, "mode", 100);
 
-        const nesgame = utils.updateGame(req.params.id, req.body);
+        const game = utils.updateGame(req.params.id, this.params);
 
-        res.send(nesgame);
+        res.send(game);
       } catch (error) {
         res.send({
           error: error.message,
@@ -70,10 +74,22 @@ class GameController {
   }
 
   delete() {
+    this.app.delete(this.route, (req, res) => {
+      try {
+        const message = utils.deleteAll();
+        res.send(message);
+      } catch (error) {
+        res.send({
+          error: error.message,
+          stack: error.stack,
+        });
+      }
+    });
+
     this.app.delete(this.route + "/:id?", (req, res) => {
       try {
-        const nesgame = utils.deleteGame(req.params.id);
-        res.send(nesgame);
+        const game = utils.deleteGame(req.params.id);
+        res.send(game);
       } catch (error) {
         res.send({
           error: error.message,
@@ -83,11 +99,45 @@ class GameController {
     });
   }
 
+  set_values(req) {
+    this.params = {
+      name: !(req.body.name !== "" || req.body.name === undefined)
+        ? req.body.name
+        : req.fields.name,
+      description: !(
+        req.body.description !== "" || req.body.description === undefined
+      )
+        ? req.body.description
+        : req.fields.description,
+      developer: !(
+        req.body.developer !== "" || req.body.developer === undefined
+      )
+        ? req.body.developer
+        : req.fields.developer,
+      launchdate: !(
+        req.body.launchdate !== "" || req.body.launchdate === undefined
+      )
+        ? req.body.launchdate
+        : req.fields.launchdate,
+      platforms: !(
+        req.body.platforms !== "" || req.body.platforms === undefined
+      )
+        ? req.body.platforms
+        : req.fields.platforms,
+      genre: !(req.body.genre !== "" || req.body.genre === undefined)
+        ? req.body.genre
+        : req.fields.genre,
+      mode: !(req.body.mode !== "" || req.body.mode === undefined)
+        ? req.body.mode
+        : req.fields.mode,
+      image: this.upload_media(req.files),
+    };
+  }
+
   verify_string(string, string_name, max_length = 80) {
     let e;
 
     if (!string || string == "") {
-      console.log(string);
       e = new Error(`Campo: ${string_name} é  obrigatório!`);
       throw e;
     }
@@ -103,6 +153,26 @@ class GameController {
       );
       throw e;
     }
+  }
+
+  upload_media(files) {
+    let dir = path.join(__dirname, "", "/uploads/");
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    let oldPath = files.image.path;
+    let newPath = dir + "/" + files.image.name;
+    let rawData = fs.readFileSync(oldPath);
+
+    fs.writeFile(newPath, rawData, function (err) {
+      if (err) throw new Error("Não foi possivel fazer o upload da imagem!");
+
+      return "Imagem foi inserida com sucesso!";
+    });
+
+    return newPath;
   }
 }
 

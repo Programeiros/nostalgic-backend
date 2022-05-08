@@ -162,3 +162,6 @@ dist
 
 # Ignore code-workspaces
 *.code-workspace
+
+#Uploaded files
+src/controller/uploads/

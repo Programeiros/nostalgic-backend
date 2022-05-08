@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const sequence = {
   _id: 1,
   get id() {
@@ -6,6 +8,17 @@ const sequence = {
 };
 
 const games = {};
+const game = {
+  id: 0,
+  name: "",
+  description: "",
+  developer: "",
+  launchdate: "",
+  platforms: "",
+  genre: "",
+  mode: "",
+  image: "",
+};
 
 function getgames() {
   try {
@@ -29,22 +42,63 @@ function getgameByid(id) {
   }
 }
 
-function setGame(game) {
-  game.id = sequence.id;
-  games[game.id] = game;
-  return game;
+function setGame(value) {
+  value.id = sequence.id;
+
+  game.id = value.id;
+  game.name = value.name;
+  game.description = value.description;
+  game.developer = value.developer;
+  game.genre = value.genre;
+  game.launchdate = value.launchdate;
+  game.mode = value.mode;
+  game.image = value.image;
+  game.platforms = value.platforms;
+
+  games[value.id] = game;
+
+  return games[game.id];
 }
 
 function updateGame(id, newdata) {
-  games[id] = newdata;
+  delete_file(games[id].image);
+
+  games[id].id = id;
+  games[id].name = newdata.name;
+  games[id].description = newdata.description;
+  games[id].developer = newdata.developer;
+  games[id].genre = newdata.genre;
+  games[id].launchdate = newdata.launchdate;
+  games[id].mode = newdata.mode;
+  games[id].image = newdata.image;
+  games[id].platforms = newdata.platforms;
 
   return games[id];
 }
 
 function deleteGame(id) {
   const game = games[id];
+  delete_file(game.image);
   delete games[id];
   return game;
+}
+
+function deleteAll() {
+  const keys = Object.keys(games);
+
+  keys.forEach((obj) => {
+    delete_file(games[obj].image);
+    delete games[obj];
+  });
+
+  return "Todos os dados deletados com sucesso!";
+}
+
+function delete_file(path) {
+  fs.unlink(path, (err) => {
+    if (err) return console.log(err);
+    console.log("Arquivo deletado com sucesso!");
+  });
 }
 
 module.exports = {
@@ -53,4 +107,5 @@ module.exports = {
   getgames,
   updateGame,
   deleteGame,
+  deleteAll,
 };

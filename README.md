@@ -12,6 +12,6 @@ API de jogos antigos do projeto Nostalgic, feita com Express js
 
 3.  Executar o projeto:
 
-        node src/app.js
+        npm start
 
-A api estará rodando automaticamente no dirtório no diretório http://localhost:3000/api
+A api estará rodando automaticamente no diretório: http://localhost:3000/

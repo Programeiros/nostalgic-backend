@@ -37,9 +37,9 @@ class GameController {
         this.verify_string(this.params.genre, "genre", 50);
         this.verify_string(this.params.mode, "mode", 100);
 
-        const nesgame = utils.setGame(this.params);
+        const game = utils.setGame(this.params);
 
-        res.send(nesgame);
+        res.send(game);
       } catch (error) {
         res.send({
           error: error.message,
@@ -61,9 +61,9 @@ class GameController {
         this.verify_string(this.params.genre, "genre", 50);
         this.verify_string(this.params.mode, "mode", 100);
 
-        const nesgame = utils.updateGame(req.params.id, this.params);
+        const game = utils.updateGame(req.params.id, this.params);
 
-        res.send(nesgame);
+        res.send(game);
       } catch (error) {
         res.send({
           error: error.message,
@@ -76,8 +76,8 @@ class GameController {
   delete() {
     this.app.delete(this.route + "/:id?", (req, res) => {
       try {
-        const nesgame = utils.deleteGame(req.params.id);
-        res.send(nesgame);
+        const game = utils.deleteGame(req.params.id);
+        res.send(game);
       } catch (error) {
         res.send({
           error: error.message,
